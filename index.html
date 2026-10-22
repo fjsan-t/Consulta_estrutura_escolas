@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta Escolas Bahia</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .filtros { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h2>Consulta de Infraestrutura Escolar (Bahia)</h2>
+
+    <div class="filtros">
+        <select id="selectMunicipio" onchange="buscarEscolas()">
+            <option value="">Todos os Municípios</option>
+        </select>
+
+        <select id="selectDependencia" onchange="buscarEscolas()">
+            <option value="">Todas as Redes</option>
+            <option value="2">Estadual</option>
+            <option value="3">Municipal</option>
+        </select>
+
+        <select id="selectLab" onchange="buscarEscolas()">
+            <option value="">Qualquer Status de Info</option>
+            <option value="1.0">Com Laboratório</option>
+            <option value="0.0">Sem Laboratório</option>
+        </select>
+
+        <input type="text" id="inputNome" oninput="buscarEscolas()" placeholder="Buscar por nome...">
+    </div>
+
+    <p>Total de escolas encontradas: <strong id="totalEscolas">0</strong></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Escola</th>
+                <th>Município</th>
+                <th>Rede</th>
+                <th>Tem Info?</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaCorpo"></tbody>
+    </table>
+
+    <script>
+        const API = "http://127.0.0.1:8000/api";
+      
+        async function carregarMunicipios() {
+            const res = await fetch(`${API}/municipios`);
+            const cidades = await res.json();
+            const select = document.getElementById("selectMunicipio");
+            cidades.forEach(c => {
+                select.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+            buscarEscolas();
+        }
+
+        async function buscarEscolas() {
+            const municipio = document.getElementById("selectMunicipio").value;
+            const dependencia = document.getElementById("selectDependencia").value;
+            const lab = document.getElementById("selectLab").value;
+            const nome = document.getElementById("inputNome").value;
+
+            let url = new URL(`${API}/escolas`);
+            if (municipio) url.searchParams.append("municipio", municipio);
+            if (dependencia) url.searchParams.append("dependencia", dependencia);
+            if (lab) url.searchParams.append("tem_lab", lab);
+            if (nome) url.searchParams.append("nome", nome);
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            document.getElementById("totalEscolas").innerText = data.total;
+
+            const corpo = document.getElementById("tabelaCorpo");
+            corpo.innerHTML = "";
+
+            data.escolas.forEach(e => {
+                const rede = e.TP_DEPENDENCIA === 2 ? 'Estadual' : (e.TP_DEPENDENCIA === 3 ? 'Municipal' : 'Outro');
+                const info = e.Tem_Informatica ? 'Sim' : 'Não';
+
+                corpo.innerHTML += `
+                    <tr>
+                        <td>${e.CO_ENTIDADE}</td>
+                        <td>${e.NO_ENTIDADE}</td>
+                        <td>${e.NO_MUNICIPIO}</td>
+                        <td>${rede}</td>
+                        <td>${info}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        carregarMunicipios();
+    </script>
+</body>
+</html>
