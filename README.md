@@ -1,6 +1,6 @@
 <h1>Análise de Dados das Escolas da Bahia</h1>
 
-<p>Aplicação web full-stack para consulta e filtragem de dados sobre a infraestrutura das escolas públicas no estado da Bahia. O projeto conta com uma API RESTful em FastAPI hospedada no Render e uma interface em HTML e JavaScript hospedada no GitHub Pages.</p>
+<p>Aplicação web full-stack em desenvolvimento para consulta e filtragem de dados sobre a infraestrutura das escolas públicas no estado da Bahia. O projeto conta com uma API RESTful em FastAPI hospedada no Render e uma interface em HTML e JavaScript hospedada no GitHub Pages.</p>
 
 <h2>Links do Projeto</h2>
 
@@ -75,13 +75,8 @@ cd anallise-dados-escolas-bahia</pre>
 <pre>pip install -r requirements.txt
 uvicorn main:app --reload</pre>
 
-<h3>3. Abrir o Frontend</h3>
-<p>Abra o arquivo index.html no navegador.</p>
 
-<h2>Estrutura do Projeto</h2>
+<h2>Próximos passos</h2>
 
-<pre>anallise-dados-escolas-bahia/
-├── main.py
-├── index.html
-├── requirements.txt
-└── README.md</pre>
+<p>Implementação de dashboards para visualização de dados </p>
+<p>Inserir informações como contato e localização das escolas. </p>
