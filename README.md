@@ -5,7 +5,7 @@
 <h2>Links do Projeto</h2>
 
 <ul>
-  <li><strong>Frontend:</strong> <a href="https://fjsan-t.github.io/anallise-dados-escolas-bahia/">https://fjsan-t.github.io/anallise-dados-escolas-bahia/</a></li>
+  <li><strong>Frontend:</strong> <a href="https://fjsan-t.github.io/Consulta_estrutura_escolas/">https://fjsan-t.github.io/Consulta_estrutura_escolas/</a></li>
   <li><strong>Backend API:</strong> https://anallise-dados-escolas-bahia.onrender.com/api</li>
 </ul>
 
