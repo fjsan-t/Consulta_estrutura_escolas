@@ -1,8 +1,13 @@
 from fastapi import FastAPI, Query
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 app = FastAPI()
+
+@app.get("/", response_class=FileResponse)
+def serve_index():
+    return FileResponse("index.html")
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,7 +17,7 @@ app.add_middleware(
 )
 
 def carregar_dados():
-    df = pd.read_csv("escolas_bahia_mvp.csv")
+    df = pd.read_csv("dados_escola_mvp.csv")
     df['Tem_Informatica'] = df['IN_LABORATORIO_INFORMATICA'] == 1.0
     return df
 
@@ -25,7 +30,7 @@ def obter_municipios():
 def filtrar_escolas(
     municipio: str = Query(None),
     dependencia: int = Query(None),
-    tem_lab: int = Query(None)
+    tem_lab: int = Query(None),
     nome: str = Query(None)
 ):
     df = carregar_dados()
