@@ -8,7 +8,6 @@
 
     <h1>Escolas da Bahia</h1>
 
-    <!-- FILTROS -->
     <div>
         <label>Município:</label>
         <select id="selectMunicipio" onchange="buscarEscolas()">
@@ -32,7 +31,7 @@
         <label>Nome:</label>
         <input type="text" id="inputNome" placeholder="Digite o nome..." onkeypress="if(event.key === 'Enter') buscarEscolas()">
 
-        <!-- BOTÃO SIMPLES -->
+       
         <button onclick="buscarEscolas()">Pesquisar</button>
     </div>
 
@@ -40,7 +39,6 @@
     <div>Total de escolas: <strong id="totalEscolas">0</strong></div>
     <br>
 
-    <!-- TABELA -->
     <table border="1">
         <thead>
             <tr>
@@ -54,11 +52,9 @@
         <tbody id="tabelaCorpo"></tbody>
     </table>
 
-    <!-- SCRIPT SIMPLES -->
     <script>
-        const API = "https://anallise-dados-escolas-bahia.onrender.com";
+        const API = "https://anallise-dados-escolas-bahia.onrender.com/api";
 
-        // 1. Pega os municípios e coloca no select
         async function carregarMunicipios() {
             const res = await fetch(`${API}/municipios`);
             const cidades = await res.json();
@@ -69,7 +65,6 @@
             });
         }
 
-        // 2. Busca as escolas conforme os filtros
         async function buscarEscolas() {
             const municipio = document.getElementById("selectMunicipio").value;
             const dependencia = document.getElementById("selectDependencia").value;
@@ -106,7 +101,6 @@
             });
         }
 
-        // Roda ao abrir a página
         carregarMunicipios();
         buscarEscolas();
     </script>
