@@ -31,7 +31,6 @@
         <label>Nome:</label>
         <input type="text" id="inputNome" placeholder="Digite o nome..." onkeypress="if(event.key === 'Enter') buscarEscolas()">
 
-       
         <button onclick="buscarEscolas()">Pesquisar</button>
     </div>
 
@@ -56,13 +55,17 @@
         const API = "https://anallise-dados-escolas-bahia.onrender.com/api";
 
         async function carregarMunicipios() {
-            const res = await fetch(`${API}/municipios`);
-            const cidades = await res.json();
-            const select = document.getElementById("selectMunicipio");
+            try {
+                const res = await fetch(`${API}/municipios`);
+                const cidades = await res.json();
+                const select = document.getElementById("selectMunicipio");
 
-            cidades.forEach(c => {
-                select.innerHTML += `<option value="${c}">${c}</option>`;
-            });
+                cidades.forEach(c => {
+                    select.innerHTML += `<option value="${c}">${c}</option>`;
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar municípios:", erro);
+            }
         }
 
         async function buscarEscolas() {
@@ -71,34 +74,38 @@
             const lab = document.getElementById("selectLab").value;
             const nome = document.getElementById("inputNome").value;
 
-            let url = new URL(`${window.location.origin}${API}/escolas`);
+            let url = new URL(`${API}/escolas`);
             if (municipio) url.searchParams.append("municipio", municipio);
             if (dependencia) url.searchParams.append("dependencia", dependencia);
             if (lab) url.searchParams.append("tem_lab", lab);
             if (nome) url.searchParams.append("nome", nome);
 
-            const res = await fetch(url);
-            const data = await res.json();
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
 
-            document.getElementById("totalEscolas").innerText = data.total;
+                document.getElementById("totalEscolas").innerText = data.total;
 
-            const corpo = document.getElementById("tabelaCorpo");
-            corpo.innerHTML = "";
+                const corpo = document.getElementById("tabelaCorpo");
+                corpo.innerHTML = "";
 
-            data.escolas.forEach(e => {
-                const rede = e.TP_DEPENDENCIA === 2 ? 'Estadual' : (e.TP_DEPENDENCIA === 3 ? 'Municipal' : 'Outro');
-                const info = e.Tem_Informatica ? 'Sim' : 'Não';
+                data.escolas.forEach(e => {
+                    const rede = e.TP_DEPENDENCIA === 2 ? 'Estadual' : (e.TP_DEPENDENCIA === 3 ? 'Municipal' : 'Outro');
+                    const info = e.Tem_Informatica ? 'Sim' : 'Não';
 
-                corpo.innerHTML += `
-                    <tr>
-                        <td>${e.CO_ENTIDADE}</td>
-                        <td>${e.NO_ENTIDADE}</td>
-                        <td>${e.NO_MUNICIPIO}</td>
-                        <td>${rede}</td>
-                        <td>${info}</td>
-                    </tr>
-                `;
-            });
+                    corpo.innerHTML += `
+                        <tr>
+                            <td>${e.CO_ENTIDADE}</td>
+                            <td>${e.NO_ENTIDADE}</td>
+                            <td>${e.NO_MUNICIPIO}</td>
+                            <td>${rede}</td>
+                            <td>${info}</td>
+                        </tr>
+                    `;
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar escolas:", erro);
+            }
         }
 
         carregarMunicipios();
